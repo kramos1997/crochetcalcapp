@@ -1,0 +1,444 @@
+/* Reset and base styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #f9f7fe;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+/* Header styles */
+header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+header h1 {
+    color: #6a3ea1;
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+}
+
+header p {
+    color: #666;
+    font-size: 1.1rem;
+}
+
+/* Calculator container */
+.calculator-container {
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 5px 20px rgba(106, 62, 161, 0.1);
+    overflow: hidden;
+}
+
+/* Tabs */
+.tabs {
+    display: flex;
+    background-color: #f5f2fa;
+    border-bottom: 1px solid #e6e0f0;
+}
+
+.tab-btn {
+    padding: 1rem 2rem;
+    background: none;
+    border: none;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #666;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.tab-btn.active {
+    color: #6a3ea1;
+    background-color: #fff;
+    border-top: 3px solid #6a3ea1;
+    margin-top: -3px;
+}
+
+.tab-btn:hover:not(.active) {
+    background-color: #ede8f7;
+}
+
+/* Tab content */
+.tab-content {
+    display: none;
+    padding: 2rem;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* Form styles */
+.form-section {
+    margin-bottom: 2rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid #e6e0f0;
+}
+
+.form-section h2 {
+    color: #6a3ea1;
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: #444;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #6a3ea1;
+    box-shadow: 0 0 0 2px rgba(106, 62, 161, 0.1);
+}
+
+/* Material and expense items */
+.material-item, .expense-item {
+    display: grid;
+    grid-template-columns: 2fr 1fr auto;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    align-items: end;
+}
+
+.remove-btn {
+    background-color: #ff6b6b;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 0.8rem;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+    transition: background-color 0.3s ease;
+}
+
+.remove-btn:hover:not(:disabled) {
+    background-color: #ff5252;
+}
+
+.remove-btn:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+/* Add buttons */
+.add-btn {
+    background-color: #e6e0f0;
+    color: #6a3ea1;
+    border: none;
+    border-radius: 6px;
+    padding: 0.8rem 1.5rem;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    margin-top: 0.5rem;
+}
+
+.add-btn:hover {
+    background-color: #d9cfe8;
+}
+
+/* Form actions */
+.form-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.primary-btn {
+    background-color: #6a3ea1;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 0.8rem 1.5rem;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+}
+
+.primary-btn:hover {
+    background-color: #5a2e91;
+}
+
+.secondary-btn {
+    background-color: #e6e0f0;
+    color: #6a3ea1;
+    border: none;
+    border-radius: 6px;
+    padding: 0.8rem 1.5rem;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.secondary-btn:hover {
+    background-color: #d9cfe8;
+}
+
+/* Results container */
+.results-container {
+    background-color: #f9f7fe;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-top: 2rem;
+}
+
+.results-container h2 {
+    color: #6a3ea1;
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+.result-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #e6e0f0;
+}
+
+.result-item:last-child {
+    border-bottom: none;
+}
+
+.result-item.total {
+    font-weight: 700;
+    color: #6a3ea1;
+    font-size: 1.1rem;
+    margin-top: 0.5rem;
+    padding-top: 0.5rem;
+    border-top: 2px solid #e6e0f0;
+}
+
+/* Saved projects */
+.saved-projects {
+    margin-top: 2rem;
+}
+
+.saved-projects h2 {
+    color: #6a3ea1;
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+.projects-list {
+    background-color: #f9f7fe;
+    border-radius: 8px;
+    padding: 1.5rem;
+}
+
+.no-projects {
+    color: #888;
+    text-align: center;
+    font-style: italic;
+}
+
+.project-card {
+    background-color: white;
+    border-radius: 6px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.project-info h3 {
+    margin-bottom: 0.3rem;
+    color: #444;
+}
+
+.project-price {
+    color: #6a3ea1;
+    font-weight: 600;
+}
+
+.project-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.project-actions button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #6a3ea1;
+    transition: color 0.3s ease;
+}
+
+.project-actions button:hover {
+    color: #5a2e91;
+}
+
+/* Notion tab */
+.notion-container {
+    padding: 1rem 0;
+}
+
+.notion-container h2 {
+    color: #6a3ea1;
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+.notion-embed {
+    margin-top: 2rem;
+    min-height: 500px;
+    border: 1px solid #e6e0f0;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.notion-placeholder {
+    padding: 2rem;
+    text-align: center;
+    color: #888;
+    font-style: italic;
+}
+
+iframe {
+    width: 100%;
+    height: 600px;
+    border: none;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    margin-top: 2rem;
+    color: #888;
+    font-size: 0.9rem;
+}
+
+footer a {
+    color: #6a3ea1;
+    text-decoration: none;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
+
+/* Modal */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    overflow-y: auto;
+}
+
+.modal-content {
+    background-color: white;
+    margin: 5% auto;
+    padding: 2rem;
+    border-radius: 12px;
+    width: 80%;
+    max-width: 800px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+    position: relative;
+}
+
+.close-modal {
+    position: absolute;
+    top: 1rem;
+    right: 1.5rem;
+    font-size: 1.5rem;
+    color: #888;
+    cursor: pointer;
+}
+
+.close-modal:hover {
+    color: #333;
+}
+
+.help-content {
+    margin-top: 1.5rem;
+}
+
+.help-content h3 {
+    color: #6a3ea1;
+    margin: 1.5rem 0 0.5rem;
+}
+
+.help-content ol {
+    padding-left: 1.5rem;
+}
+
+.help-content li {
+    margin-bottom: 0.5rem;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    .container {
+        padding: 1rem;
+    }
+    
+    .tab-btn {
+        padding: 0.8rem 1rem;
+        font-size: 0.9rem;
+    }
+    
+    .tab-content {
+        padding: 1.5rem;
+    }
+    
+    .material-item, .expense-item {
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+    }
+    
+    .form-actions {
+        flex-direction: column;
+    }
+    
+    .modal-content {
+        width: 95%;
+        margin: 10% auto;
+        padding: 1.5rem;
+    }
+}
+

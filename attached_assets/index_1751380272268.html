@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crochet Pricing Calculator</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Crochet Pricing Calculator</h1>
+            <p>Calculate fair prices for your handmade crochet items</p>
+        </header>
+
+        <div class="calculator-container">
+            <div class="tabs">
+                <button class="tab-btn active" data-tab="calculator">Calculator</button>
+                <button class="tab-btn" data-tab="notion">Notion Tracker</button>
+            </div>
+
+            <div class="tab-content active" id="calculator">
+                <form id="pricing-form">
+                    <div class="form-section">
+                        <h2>Materials</h2>
+                        <div id="materials-container">
+                            <div class="material-item">
+                                <div class="form-group">
+                                    <label for="material-name-1">Material Name</label>
+                                    <input type="text" id="material-name-1" placeholder="e.g., Yarn">
+                                </div>
+                                <div class="form-group">
+                                    <label for="material-cost-1">Cost ($)</label>
+                                    <input type="number" id="material-cost-1" min="0" step="0.01" placeholder="0.00">
+                                </div>
+                                <button type="button" class="remove-btn" disabled>Remove</button>
+                            </div>
+                        </div>
+                        <button type="button" id="add-material" class="add-btn">+ Add Material</button>
+                    </div>
+
+                    <div class="form-section">
+                        <h2>Labor</h2>
+                        <div class="form-group">
+                            <label for="hourly-rate">Hourly Rate ($)</label>
+                            <input type="number" id="hourly-rate" min="0" step="0.01" placeholder="15.00">
+                        </div>
+                        <div class="form-group">
+                            <label for="hours-spent">Hours Spent</label>
+                            <input type="number" id="hours-spent" min="0" step="0.25" placeholder="0">
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h2>Business Expenses</h2>
+                        <div id="expenses-container">
+                            <div class="expense-item">
+                                <div class="form-group">
+                                    <label for="expense-name-1">Expense Name</label>
+                                    <input type="text" id="expense-name-1" placeholder="e.g., Tools">
+                                </div>
+                                <div class="form-group">
+                                    <label for="expense-cost-1">Cost ($)</label>
+                                    <input type="number" id="expense-cost-1" min="0" step="0.01" placeholder="0.00">
+                                </div>
+                                <button type="button" class="remove-btn" disabled>Remove</button>
+                            </div>
+                        </div>
+                        <button type="button" id="add-expense" class="add-btn">+ Add Expense</button>
+                    </div>
+
+                    <div class="form-section">
+                        <h2>Additional Factors</h2>
+                        <div class="form-group">
+                            <label for="profit-margin">Profit Margin (%)</label>
+                            <input type="number" id="profit-margin" min="0" max="100" step="1" placeholder="30">
+                        </div>
+                        <div class="form-group">
+                            <label for="shipping-cost">Shipping Cost ($)</label>
+                            <input type="number" id="shipping-cost" min="0" step="0.01" placeholder="0.00">
+                        </div>
+                        <div class="form-group">
+                            <label for="tax-rate">Tax Rate (%)</label>
+                            <input type="number" id="tax-rate" min="0" max="100" step="0.1" placeholder="0">
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" id="calculate-btn" class="primary-btn">Calculate Price</button>
+                        <button type="button" id="reset-btn" class="secondary-btn">Reset</button>
+                        <button type="button" id="save-btn" class="secondary-btn">Save Project</button>
+                    </div>
+                </form>
+
+                <div class="results-container" id="results">
+                    <h2>Price Breakdown</h2>
+                    <div class="result-item">
+                        <span>Materials Cost:</span>
+                        <span id="materials-cost">$0.00</span>
+                    </div>
+                    <div class="result-item">
+                        <span>Labor Cost:</span>
+                        <span id="labor-cost">$0.00</span>
+                    </div>
+                    <div class="result-item">
+                        <span>Business Expenses:</span>
+                        <span id="business-expenses">$0.00</span>
+                    </div>
+                    <div class="result-item">
+                        <span>Base Cost:</span>
+                        <span id="base-cost">$0.00</span>
+                    </div>
+                    <div class="result-item">
+                        <span>Profit Amount:</span>
+                        <span id="profit-amount">$0.00</span>
+                    </div>
+                    <div class="result-item">
+                        <span>Shipping:</span>
+                        <span id="shipping-amount">$0.00</span>
+                    </div>
+                    <div class="result-item">
+                        <span>Tax:</span>
+                        <span id="tax-amount">$0.00</span>
+                    </div>
+                    <div class="result-item total">
+                        <span>Wholesale Price:</span>
+                        <span id="wholesale-price">$0.00</span>
+                    </div>
+                    <div class="result-item total">
+                        <span>Retail Price:</span>
+                        <span id="retail-price">$0.00</span>
+                    </div>
+                </div>
+
+                <div class="saved-projects" id="saved-projects">
+                    <h2>Saved Projects</h2>
+                    <div class="projects-list" id="projects-list">
+                        <p class="no-projects">No saved projects yet.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-content" id="notion">
+                <div class="notion-container">
+                    <h2>Notion Tracker Integration</h2>
+                    <p>Embed your Notion tracker below to keep track of all your crochet projects and pricing.</p>
+                    
+                    <div class="form-group">
+                        <label for="notion-url">Notion Embed URL</label>
+                        <input type="text" id="notion-url" placeholder="Paste your Notion embed URL here">
+                        <button type="button" id="embed-notion" class="primary-btn">Embed</button>
+                    </div>
+                    
+                    <div class="notion-embed" id="notion-embed">
+                        <p class="notion-placeholder">Your Notion page will appear here after embedding.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>© 2025 Crochet Pricing Calculator | <a href="#" id="help-link">How to Use</a></p>
+        </footer>
+
+        <div class="modal" id="help-modal">
+            <div class="modal-content">
+                <span class="close-modal">&times;</span>
+                <h2>How to Use the Crochet Pricing Calculator</h2>
+                <div class="help-content">
+                    <h3>Calculator Tab</h3>
+                    <ol>
+                        <li><strong>Materials:</strong> Add all materials used in your project with their costs.</li>
+                        <li><strong>Labor:</strong> Enter your hourly rate and the time spent on the project.</li>
+                        <li><strong>Business Expenses:</strong> Include any overhead costs like tools, marketing, etc.</li>
+                        <li><strong>Additional Factors:</strong> Set your profit margin, shipping costs, and tax rate.</li>
+                        <li><strong>Calculate:</strong> Click the Calculate button to see your pricing breakdown.</li>
+                        <li><strong>Save Project:</strong> Save your calculations for future reference.</li>
+                    </ol>
+                    
+                    <h3>Notion Tab</h3>
+                    <ol>
+                        <li>Create a Notion page for tracking your crochet projects.</li>
+                        <li>Get the embed link from Notion (Share → Copy link → Enable public access).</li>
+                        <li>Paste the link in the Notion Embed URL field and click Embed.</li>
+                    </ol>
+                    
+                    <h3>Pricing Formula</h3>
+                    <p>The calculator uses this formula:</p>
+                    <p><strong>Base Cost</strong> = Materials + Labor + Business Expenses</p>
+                    <p><strong>Wholesale Price</strong> = Base Cost + (Base Cost × Profit Margin) + Shipping + Tax</p>
+                    <p><strong>Retail Price</strong> = Wholesale Price × 2</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
