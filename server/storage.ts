@@ -46,6 +46,16 @@ export interface IStorage {
     monthlyProjects: number;
     monthlyRevenue: number;
   }>;
+  
+  // Subscription operations
+  updateUserSubscription(userId: string, updates: {
+    stripeCustomerId?: string;
+    stripeSubscriptionId?: string;
+    subscriptionType?: string;
+    isSubscribed?: boolean;
+    subscriptionEndsAt?: Date;
+  }): Promise<void>;
+  incrementCalculations(userId: string): Promise<void>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -347,6 +357,29 @@ class MemStorage implements IStorage {
       monthlyProjects,
       monthlyRevenue,
     };
+  }
+
+  async updateUserSubscription(userId: string, updates: {
+    stripeCustomerId?: string;
+    stripeSubscriptionId?: string;
+    subscriptionType?: string;
+    isSubscribed?: boolean;
+    subscriptionEndsAt?: Date;
+  }): Promise<void> {
+    const user = this.users.get(userId);
+    if (user) {
+      Object.assign(user, updates, { updatedAt: new Date() });
+      this.users.set(userId, user);
+    }
+  }
+
+  async incrementCalculations(userId: string): Promise<void> {
+    const user = this.users.get(userId);
+    if (user) {
+      const calculationsUsed = (user.calculationsUsed || 0) + 1;
+      Object.assign(user, { calculationsUsed, updatedAt: new Date() });
+      this.users.set(userId, user);
+    }
   }
 }
 

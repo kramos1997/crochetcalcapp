@@ -1,5 +1,6 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
+import Stripe from "stripe";
 import { storage } from "./storage";
 import { setupAuth, isAuthenticated } from "./replitAuth";
 import { 
@@ -9,6 +10,13 @@ import {
   insertProjectTemplateSchema 
 } from "@shared/schema";
 import { z } from "zod";
+
+if (!process.env.STRIPE_SECRET_KEY) {
+  throw new Error('Missing required Stripe secret: STRIPE_SECRET_KEY');
+}
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
+  apiVersion: "2025-06-30.basil",
+});
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Auth middleware
@@ -204,6 +212,192 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error exporting PDF:", error);
       res.status(500).json({ message: "Failed to export PDF" });
+    }
+  });
+
+  // Subscription routes
+  app.get('/api/subscription/stats', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const user = await storage.getUser(userId);
+      
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      const stats = {
+        calculationsUsed: user.calculationsUsed || 0,
+        calculationsRemaining: Math.max(0, 7 - (user.calculationsUsed || 0)),
+        isSubscribed: user.isSubscribed || false,
+        subscriptionType: user.subscriptionType
+      };
+
+      res.json(stats);
+    } catch (error) {
+      console.error("Error fetching subscription stats:", error);
+      res.status(500).json({ message: "Failed to fetch subscription stats" });
+    }
+  });
+
+  app.post('/api/create-subscription', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const { plan } = req.query;
+      const user = await storage.getUser(userId);
+
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      // Check if user already has a subscription
+      if (user.stripeSubscriptionId) {
+        const subscription = await stripe.subscriptions.retrieve(user.stripeSubscriptionId);
+        
+        if (subscription.status === 'active') {
+          return res.json({
+            subscriptionId: subscription.id,
+            clientSecret: subscription.latest_invoice?.payment_intent?.client_secret,
+          });
+        }
+      }
+
+      // Create Stripe customer if doesn't exist
+      let customerId = user.stripeCustomerId;
+      if (!customerId) {
+        const customer = await stripe.customers.create({
+          email: user.email || undefined,
+          metadata: { userId }
+        });
+        customerId = customer.id;
+        await storage.updateUserSubscription(userId, { stripeCustomerId: customerId });
+      }
+
+      // Define pricing based on plan
+      const priceData = {
+        monthly: {
+          unit_amount: 199, // $1.99
+          recurring: { interval: 'month' as const }
+        },
+        yearly: {
+          unit_amount: 900, // $9.00
+          recurring: { interval: 'year' as const }
+        }
+      };
+
+      if (!priceData[plan as keyof typeof priceData]) {
+        return res.status(400).json({ message: "Invalid plan" });
+      }
+
+      // Create subscription with simpler structure
+      const subscription = await stripe.subscriptions.create({
+        customer: customerId,
+        items: [{
+          price_data: {
+            currency: 'usd',
+            product_data: {
+              name: 'CrochetCraft Pro'
+            },
+            unit_amount: priceData[plan as keyof typeof priceData].unit_amount,
+            recurring: priceData[plan as keyof typeof priceData].recurring
+          }
+        }],
+        payment_behavior: 'default_incomplete',
+        expand: ['latest_invoice.payment_intent'],
+      });
+
+      await storage.updateUserSubscription(userId, {
+        stripeSubscriptionId: subscription.id,
+        subscriptionType: plan as string
+      });
+
+      res.json({
+        subscriptionId: subscription.id,
+        clientSecret: subscription.latest_invoice?.payment_intent?.client_secret,
+      });
+    } catch (error: any) {
+      console.error("Error creating subscription:", error);
+      res.status(500).json({ message: "Failed to create subscription: " + error.message });
+    }
+  });
+
+  app.post('/api/create-payment-intent', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const { plan } = req.query;
+      const user = await storage.getUser(userId);
+
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      if (plan !== 'lifetime') {
+        return res.status(400).json({ message: "Invalid plan for one-time purchase" });
+      }
+
+      // Create Stripe customer if doesn't exist
+      let customerId = user.stripeCustomerId;
+      if (!customerId) {
+        const customer = await stripe.customers.create({
+          email: user.email || undefined,
+          metadata: { userId }
+        });
+        customerId = customer.id;
+        await storage.updateUserSubscription(userId, { stripeCustomerId: customerId });
+      }
+
+      const paymentIntent = await stripe.paymentIntents.create({
+        amount: 2999, // $29.99
+        currency: 'usd',
+        customer: customerId,
+        metadata: {
+          userId,
+          plan: 'lifetime'
+        },
+        description: 'CrochetCraft Pro - Lifetime Access'
+      });
+
+      res.json({ clientSecret: paymentIntent.client_secret });
+    } catch (error: any) {
+      console.error("Error creating payment intent:", error);
+      res.status(500).json({ message: "Failed to create payment intent: " + error.message });
+    }
+  });
+
+  // Endpoint to check/increment calculations (freemium model)
+  app.post('/api/calculations/use', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const user = await storage.getUser(userId);
+
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      // Check if user is subscribed
+      if (user.isSubscribed) {
+        return res.json({ success: true, unlimited: true });
+      }
+
+      // Check free calculation limit
+      const calculationsUsed = user.calculationsUsed || 0;
+      if (calculationsUsed >= 7) {
+        return res.status(403).json({ 
+          message: "Free calculation limit reached. Please upgrade to continue.",
+          limitReached: true 
+        });
+      }
+
+      // Increment calculation count
+      await storage.incrementCalculations(userId);
+      
+      res.json({ 
+        success: true, 
+        calculationsUsed: calculationsUsed + 1,
+        calculationsRemaining: 6 - calculationsUsed
+      });
+    } catch (error) {
+      console.error("Error using calculation:", error);
+      res.status(500).json({ message: "Failed to process calculation" });
     }
   });
 

@@ -5,11 +5,10 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { useAuth } from "@/hooks/useAuth";
 import Landing from "@/pages/Landing";
-import Home from "@/pages/Home";
 import Calculator from "@/pages/Calculator";
 import Projects from "@/pages/Projects";
-import Templates from "@/pages/Templates";
-import Analytics from "@/pages/Analytics";
+import Subscription from "@/pages/Subscription";
+import Checkout from "@/pages/Checkout";
 import Settings from "@/pages/Settings";
 import Layout from "@/components/Layout";
 import NotFound from "@/pages/not-found";
@@ -31,11 +30,10 @@ function Router() {
         <Route path="/" component={Landing} />
       ) : (
         <Layout>
-          <Route path="/" component={Home} />
-          <Route path="/calculator" component={Calculator} />
+          <Route path="/" component={Calculator} />
           <Route path="/projects" component={Projects} />
-          <Route path="/templates" component={Templates} />
-          <Route path="/analytics" component={Analytics} />
+          <Route path="/subscription" component={Subscription} />
+          <Route path="/checkout" component={Checkout} />
           <Route path="/settings" component={Settings} />
         </Layout>
       )}

@@ -16,12 +16,9 @@ import {
 import type { UserStats } from "@/types";
 
 const navigation = [
-  { name: 'Dashboard', href: '/', icon: BarChart3 },
-  { name: 'Pricing Calculator', href: '/calculator', icon: Calculator },
+  { name: 'Pricing Calculator', href: '/', icon: Calculator },
   { name: 'My Projects', href: '/projects', icon: FolderOpen },
-  { name: 'Templates', href: '/templates', icon: Copy },
-  { name: 'Analytics', href: '/analytics', icon: TrendingUp },
-  { name: 'Exports', href: '/exports', icon: FileText },
+  { name: 'Subscription', href: '/subscription', icon: BarChart3 },
   { name: 'Settings', href: '/settings', icon: Settings },
 ];
 

@@ -4,59 +4,65 @@
 
 :root {
   --background: hsl(0, 0%, 100%);
-  --foreground: hsl(20, 14.3%, 4.1%);
-  --muted: hsl(60, 4.8%, 95.9%);
-  --muted-foreground: hsl(25, 5.3%, 44.7%);
+  --foreground: hsl(0, 0%, 10%);
+  --muted: hsl(0, 0%, 98%);
+  --muted-foreground: hsl(0, 0%, 45%);
   --popover: hsl(0, 0%, 100%);
-  --popover-foreground: hsl(20, 14.3%, 4.1%);
+  --popover-foreground: hsl(0, 0%, 10%);
   --card: hsl(0, 0%, 100%);
-  --card-foreground: hsl(20, 14.3%, 4.1%);
-  --border: hsl(20, 5.9%, 90%);
-  --input: hsl(20, 5.9%, 90%);
-  --primary: hsl(264, 44%, 44%);
+  --card-foreground: hsl(0, 0%, 10%);
+  --border: hsl(0, 0%, 92%);
+  --input: hsl(0, 0%, 95%);
+  --primary: hsl(0, 0%, 15%);
   --primary-foreground: hsl(0, 0%, 98%);
-  --secondary: hsl(60, 4.8%, 95.9%);
-  --secondary-foreground: hsl(24, 9.8%, 10%);
-  --accent: hsl(60, 4.8%, 95.9%);
-  --accent-foreground: hsl(24, 9.8%, 10%);
+  --secondary: hsl(0, 0%, 96%);
+  --secondary-foreground: hsl(0, 0%, 15%);
+  --accent: hsl(0, 0%, 96%);
+  --accent-foreground: hsl(0, 0%, 15%);
   --destructive: hsl(0, 84.2%, 60.2%);
   --destructive-foreground: hsl(60, 9.1%, 97.8%);
-  --ring: hsl(264, 44%, 44%);
-  --radius: 0.5rem;
+  --ring: hsl(0, 0%, 20%);
+  --radius: 0.75rem;
   
-  /* Custom crochet theme colors */
-  --primary-50: hsl(290, 100%, 98%);
-  --primary-100: hsl(290, 77%, 95%);
-  --primary-200: hsl(290, 60%, 90%);
-  --primary-300: hsl(290, 55%, 85%);
-  --primary-400: hsl(264, 50%, 65%);
-  --primary-500: hsl(264, 44%, 44%);
-  --primary-600: hsl(264, 44%, 38%);
-  --primary-700: hsl(264, 44%, 32%);
-  --primary-800: hsl(264, 44%, 26%);
-  --primary-900: hsl(264, 44%, 20%);
+  /* High-end neutral color palette */
+  --neutral-50: hsl(0, 0%, 98%);
+  --neutral-100: hsl(0, 0%, 96%);
+  --neutral-200: hsl(0, 0%, 93%);
+  --neutral-300: hsl(0, 0%, 88%);
+  --neutral-400: hsl(0, 0%, 64%);
+  --neutral-500: hsl(0, 0%, 45%);
+  --neutral-600: hsl(0, 0%, 32%);
+  --neutral-700: hsl(0, 0%, 25%);
+  --neutral-800: hsl(0, 0%, 15%);
+  --neutral-900: hsl(0, 0%, 9%);
+  
+  /* Accent colors for subscription tiers */
+  --accent-gold: hsl(45, 100%, 51%);
+  --accent-gold-foreground: hsl(0, 0%, 15%);
+  --accent-silver: hsl(0, 0%, 75%);
+  --accent-silver-foreground: hsl(0, 0%, 15%);
 }
 
 .dark {
-  --background: hsl(240, 10%, 3.9%);
+  --background: hsl(0, 0%, 9%);
   --foreground: hsl(0, 0%, 98%);
-  --muted: hsl(240, 3.7%, 15.9%);
-  --muted-foreground: hsl(240, 5%, 64.9%);
-  --popover: hsl(240, 10%, 3.9%);
+  --muted: hsl(0, 0%, 15%);
+  --muted-foreground: hsl(0, 0%, 65%);
+  --popover: hsl(0, 0%, 9%);
   --popover-foreground: hsl(0, 0%, 98%);
-  --card: hsl(240, 10%, 3.9%);
+  --card: hsl(0, 0%, 9%);
   --card-foreground: hsl(0, 0%, 98%);
-  --border: hsl(240, 3.7%, 15.9%);
-  --input: hsl(240, 3.7%, 15.9%);
-  --primary: hsl(264, 44%, 44%);
-  --primary-foreground: hsl(0, 0%, 98%);
-  --secondary: hsl(240, 3.7%, 15.9%);
+  --border: hsl(0, 0%, 20%);
+  --input: hsl(0, 0%, 15%);
+  --primary: hsl(0, 0%, 98%);
+  --primary-foreground: hsl(0, 0%, 9%);
+  --secondary: hsl(0, 0%, 15%);
   --secondary-foreground: hsl(0, 0%, 98%);
-  --accent: hsl(240, 3.7%, 15.9%);
+  --accent: hsl(0, 0%, 15%);
   --accent-foreground: hsl(0, 0%, 98%);
   --destructive: hsl(0, 62.8%, 30.6%);
   --destructive-foreground: hsl(0, 0%, 98%);
-  --ring: hsl(264, 44%, 44%);
+  --ring: hsl(0, 0%, 90%);
 }
 
 @layer base {
@@ -71,24 +77,32 @@
 }
 
 @layer components {
-  .primary-gradient {
-    background: linear-gradient(135deg, hsl(290, 100%, 98%) 0%, hsl(264, 44%, 88%) 100%);
+  .neutral-gradient {
+    background: linear-gradient(135deg, hsl(0, 0%, 98%) 0%, hsl(0, 0%, 93%) 100%);
   }
   
   .card-hover {
-    @apply transition-all duration-200 hover:shadow-lg hover:scale-[1.02];
+    @apply transition-all duration-300 hover:shadow-xl hover:scale-[1.02];
   }
   
   .sidebar-link {
-    @apply flex items-center px-4 py-2 text-sm font-medium rounded-lg transition-colors;
+    @apply flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-all duration-200;
   }
   
   .sidebar-link-active {
-    @apply text-primary bg-primary-50 border-r-2 border-primary;
+    @apply text-neutral-900 bg-neutral-100 shadow-sm;
   }
   
   .sidebar-link-inactive {
-    @apply text-gray-700 hover:bg-gray-50;
+    @apply text-neutral-600 hover:bg-neutral-50 hover:text-neutral-900;
+  }
+  
+  .premium-card {
+    @apply bg-gradient-to-br from-neutral-50 to-neutral-100 border border-neutral-200 shadow-lg;
+  }
+  
+  .subscription-card {
+    @apply bg-white border border-neutral-200 rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300;
   }
 }
 
@@ -98,14 +112,14 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: hsl(60, 4.8%, 95.9%);
+  background: hsl(0, 0%, 96%);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: hsl(264, 44%, 44%);
+  background: hsl(0, 0%, 70%);
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: hsl(264, 44%, 38%);
+  background: hsl(0, 0%, 60%);
 }
