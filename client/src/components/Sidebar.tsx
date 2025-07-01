@@ -1,0 +1,90 @@
+import { useLocation } from "wouter";
+import { Link } from "wouter";
+import { useQuery } from "@tanstack/react-query";
+import { cn } from "@/lib/utils";
+import { 
+  BarChart3, 
+  Calculator, 
+  FolderOpen, 
+  Copy, 
+  TrendingUp, 
+  FileText, 
+  Settings,
+  Scissors
+} from "lucide-react";
+import type { UserStats } from "@/types";
+
+const navigation = [
+  { name: 'Dashboard', href: '/', icon: BarChart3 },
+  { name: 'Pricing Calculator', href: '/calculator', icon: Calculator },
+  { name: 'My Projects', href: '/projects', icon: FolderOpen },
+  { name: 'Templates', href: '/templates', icon: Copy },
+  { name: 'Analytics', href: '/analytics', icon: TrendingUp },
+  { name: 'Exports', href: '/exports', icon: FileText },
+  { name: 'Settings', href: '/settings', icon: Settings },
+];
+
+export default function Sidebar() {
+  const [location] = useLocation();
+
+  const { data: stats } = useQuery<UserStats>({
+    queryKey: ["/api/analytics/stats"],
+  });
+
+  const formatCurrency = (amount: number) => {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+    }).format(amount);
+  };
+
+  return (
+    <aside className="fixed inset-y-0 left-0 z-30 w-64 bg-white shadow-lg border-r border-gray-200 pt-16 transform transition-transform duration-300 ease-in-out lg:translate-x-0">
+      <div className="flex flex-col h-full">
+        {/* Navigation */}
+        <nav className="flex-1 px-4 py-6 space-y-2">
+          {navigation.map((item) => {
+            const isActive = location === item.href || 
+              (item.href !== '/' && location.startsWith(item.href));
+            
+            return (
+              <Link key={item.name} href={item.href}>
+                <a className={cn(
+                  "sidebar-link",
+                  isActive ? "sidebar-link-active" : "sidebar-link-inactive"
+                )}>
+                  <item.icon className="mr-3 h-5 w-5" />
+                  {item.name}
+                </a>
+              </Link>
+            );
+          })}
+        </nav>
+        
+        {/* Quick Stats */}
+        <div className="px-4 py-4 border-t border-gray-200">
+          <div className="bg-primary-50 rounded-lg p-4">
+            <div className="flex items-center mb-2">
+              <Scissors className="h-4 w-4 text-primary mr-2" />
+              <h3 className="text-sm font-medium text-primary-700">This Month</h3>
+            </div>
+            <div className="space-y-1">
+              <div className="flex justify-between text-xs">
+                <span className="text-gray-600">Projects:</span>
+                <span className="font-medium">
+                  {stats?.monthlyProjects || 0}
+                </span>
+              </div>
+              <div className="flex justify-between text-xs">
+                <span className="text-gray-600">Revenue:</span>
+                <span className="font-medium text-green-600">
+                  {formatCurrency(stats?.monthlyRevenue || 0)}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </aside>
+  );
+}
