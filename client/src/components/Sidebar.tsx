@@ -10,7 +10,8 @@ import {
   TrendingUp, 
   FileText, 
   Settings,
-  Scissors
+  Scissors,
+  X
 } from "lucide-react";
 import type { UserStats } from "@/types";
 
@@ -24,7 +25,12 @@ const navigation = [
   { name: 'Settings', href: '/settings', icon: Settings },
 ];
 
-export default function Sidebar() {
+interface SidebarProps {
+  isOpen?: boolean;
+  onClose?: () => void;
+}
+
+export default function Sidebar({ isOpen = true, onClose }: SidebarProps) {
   const [location] = useLocation();
 
   const { data: stats } = useQuery<UserStats>({
@@ -39,8 +45,23 @@ export default function Sidebar() {
   };
 
   return (
-    <aside className="fixed inset-y-0 left-0 z-30 w-64 bg-white shadow-lg border-r border-gray-200 pt-16 transform transition-transform duration-300 ease-in-out lg:translate-x-0">
+    <aside className={cn(
+      "fixed inset-y-0 left-0 z-30 w-64 bg-white shadow-lg border-r border-gray-200 pt-16 transform transition-transform duration-300 ease-in-out",
+      isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
+    )}>
       <div className="flex flex-col h-full">
+        {/* Close button for mobile */}
+        {onClose && (
+          <div className="flex justify-end p-4 lg:hidden">
+            <button
+              onClick={onClose}
+              className="p-2 rounded-md text-gray-500 hover:text-gray-700 hover:bg-gray-100 transition-colors"
+              aria-label="Close menu"
+            >
+              <X className="h-5 w-5" />
+            </button>
+          </div>
+        )}
         {/* Navigation */}
         <nav className="flex-1 px-4 py-6 space-y-2">
           {navigation.map((item) => {

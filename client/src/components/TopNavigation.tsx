@@ -12,9 +12,13 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useAuth } from "@/hooks/useAuth";
 import { Link } from "wouter";
-import { Scissors, Search, Bell, User, Settings, LogOut } from "lucide-react";
+import { Scissors, Search, Bell, User, Settings, LogOut, Menu } from "lucide-react";
 
-export default function TopNavigation() {
+interface TopNavigationProps {
+  onMenuClick?: () => void;
+}
+
+export default function TopNavigation({ onMenuClick }: TopNavigationProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const { user } = useAuth();
 
@@ -49,8 +53,19 @@ export default function TopNavigation() {
     <nav className="bg-white shadow-sm border-b border-gray-200 fixed top-0 w-full z-40">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          {/* Logo */}
+          {/* Menu Button and Logo */}
           <div className="flex items-center">
+            {/* Mobile menu button */}
+            {onMenuClick && (
+              <button
+                onClick={onMenuClick}
+                className="lg:hidden p-2 rounded-md text-gray-500 hover:text-gray-700 hover:bg-gray-100 transition-colors mr-3"
+                aria-label="Open menu"
+              >
+                <Menu className="h-6 w-6" />
+              </button>
+            )}
+            
             <div className="flex-shrink-0 flex items-center">
               <Scissors className="h-8 w-8 text-primary mr-3" />
               <Link href="/">
